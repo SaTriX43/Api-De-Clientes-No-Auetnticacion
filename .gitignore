@@ -1,0 +1,108 @@
+﻿############################
+#   ARCHIVOS GENERALES    #
+############################
+*.DS_Store
+*.tmp
+*.temp
+*.bak
+*.swp
+*.log
+
+############################
+#     VISUAL STUDIO       #
+############################
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+############################
+#      BUILD / OUTPUT     #
+############################
+bin/
+obj/
+out/
+Debug/
+Release/
+x64/
+x86/
+*.dll
+*.exe
+*.pdb
+
+############################
+#     ASP.NET CORE        #
+############################
+# Archivos generados en tiempo de ejecución
+wwwroot/lib/
+wwwroot/dist/
+appsettings.Development.json
+appsettings.Local.json
+
+# Si quieres ignorar TODOS excepto appsettings.json, usa:
+# !appsettings.json
+
+############################
+#  ENTITY FRAMEWORK CORE  #
+############################
+# Migraciones opcionales: coméntalo si quieres subirlas al repo
+#migrations/
+#migration/
+#*.db
+
+############################
+#     LOGGING SERILOG     #
+############################
+logs/
+*.log
+*.json
+
+############################
+#       UPLOADS           #
+############################
+# No subir archivos reales al repo
+Uploads/
+uploads/
+files/
+storage/
+
+############################
+#         DOTNET          #
+############################
+# Archivos temporales
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Archivos generados por dotnet
+*.nuget.props
+*.nuget.targets
+
+############################
+#      SISTEMA / SO       #
+############################
+Thumbs.db
+ehthumbs.db
+*.lnk
+desktop.ini
+
+############################
+#       COMPRESSION       #
+############################
+*.zip
+*.rar
+*.tar.gz
+*.7z
+
+############################
+#        SECURITY         #
+############################
+# No subir claves o certificados
+*.pfx
+*.key
+*.cer
+*.crt
+secrets.json
+.env
