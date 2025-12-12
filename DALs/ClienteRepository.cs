@@ -55,7 +55,7 @@ namespace API_de_Clientes__sin_autenticación_.DALs
             await _context.SaveChangesAsync();
             return cliente;
         }
-        public async Task<Cliente> ActualizarCliente(ClienteCrearDto clienteActualizar, int id)
+        public async Task<Cliente> ActualizarCliente(Cliente clienteActualizar, int id)
         {
             var clienteEncontrado = await _context.Clientes.FirstOrDefaultAsync(c  => c.Id == id);
 

@@ -105,7 +105,15 @@ namespace API_de_Clientes__sin_autenticación_.Services
                 return Result<ClienteDto>.Failure($"Su cliente con id = {id} no existe");
             }
 
-            var clienteActualizado = await _clienteRepository.ActualizarCliente(clienteActualizar, id);
+            var emailNormalisado = clienteActualizar.Email.Trim().ToLower();
+
+            var clienteActualizarModel = new Cliente
+            {
+                Nombre = clienteActualizar.Nombre,
+                Email = emailNormalisado
+            };
+
+            var clienteActualizado = await _clienteRepository.ActualizarCliente(clienteActualizarModel, id);
 
             var clienteActualizadoDto = new ClienteDto
             {
