@@ -1,4 +1,5 @@
-﻿using API_de_Clientes__sin_autenticación_.Models;
+﻿using API_de_Clientes__sin_autenticación_.DTOs;
+using API_de_Clientes__sin_autenticación_.Models;
 
 namespace API_de_Clientes__sin_autenticación_.DALs
 {
@@ -8,5 +9,7 @@ namespace API_de_Clientes__sin_autenticación_.DALs
         public Task<Cliente?> ObtenerCliente(int clienteId);
         public Task<List<Cliente>> ObtenerClientes(DateTime? fechaInicio, DateTime? fechaFinal, bool ordenarDeZ);
         public Task<Cliente> CrearCliente(Cliente cliente);
+        public Task<Cliente> ActualizarCliente(ClienteCrearDto clienteActualizar, int id);
+        public Task EliminarCliente(int clienteId);
     }
 }

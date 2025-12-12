@@ -1,4 +1,5 @@
 ﻿using API_Clientes.Data;
+using API_de_Clientes__sin_autenticación_.DTOs;
 using API_de_Clientes__sin_autenticación_.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,6 +54,24 @@ namespace API_de_Clientes__sin_autenticación_.DALs
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
             return cliente;
+        }
+        public async Task<Cliente> ActualizarCliente(ClienteCrearDto clienteActualizar, int id)
+        {
+            var clienteEncontrado = await _context.Clientes.FirstOrDefaultAsync(c  => c.Id == id);
+
+            clienteEncontrado.Nombre = clienteActualizar.Nombre;
+            clienteEncontrado.Email = clienteActualizar.Email;
+
+            await _context.SaveChangesAsync();
+
+            return clienteEncontrado;
+        }
+        public async Task EliminarCliente(int clienteId)
+        {
+            var clienteEncontrado = await _context.Clientes.FirstOrDefaultAsync(c => c.Id == clienteId);
+
+            _context.Remove(clienteEncontrado);
+            await _context.SaveChangesAsync();
         }
     }
 }

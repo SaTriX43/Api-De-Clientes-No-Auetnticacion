@@ -2,6 +2,7 @@
 using API_de_Clientes__sin_autenticación_.DTOs;
 using API_de_Clientes__sin_autenticación_.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Formats.Asn1;
 
 namespace API_de_Clientes__sin_autenticación_.Services
 {
@@ -27,6 +28,29 @@ namespace API_de_Clientes__sin_autenticación_.Services
                 Nombre = clienteEncontrado.Nombre,
                 Email = clienteEncontrado.Email,
                 FechaDeRegistro = clienteEncontrado.FechaDeRegistro 
+            };
+
+            return Result<ClienteDto>.Success(clienteEncontradoDto);
+        }
+        public async Task<Result<ClienteDto>> ObtenerClientePorEmail(string email)
+        {
+            if (email == null || email.Trim() == "") {
+                return Result<ClienteDto>.Failure("Su email no puede ser null o estar vacio");
+            }
+
+            var clienteEncontrado = await _clienteRepository.ObtenerClientePorEmail(email);
+
+            if (clienteEncontrado == null)
+            {
+                return Result<ClienteDto>.Failure("Cliente con email no existente");
+            }
+
+            var clienteEncontradoDto = new ClienteDto
+            {
+                Id = clienteEncontrado.Id,
+                Nombre = clienteEncontrado.Nombre,
+                Email= clienteEncontrado.Email,
+                FechaDeRegistro = clienteEncontrado.FechaDeRegistro
             };
 
             return Result<ClienteDto>.Success(clienteEncontradoDto);
@@ -72,6 +96,40 @@ namespace API_de_Clientes__sin_autenticación_.Services
             };
 
             return Result<ClienteDto>.Success(clienteCreadoDto);
+        }
+        public async Task<Result<ClienteDto>> ActualizarCliente(ClienteCrearDto clienteActualizar, int id)
+        {
+            var clienteExiste = await _clienteRepository.ObtenerCliente(id);
+
+            if (clienteExiste == null) {
+                return Result<ClienteDto>.Failure($"Su cliente con id = {id} no existe");
+            }
+
+            var clienteActualizado = await _clienteRepository.ActualizarCliente(clienteActualizar, id);
+
+            var clienteActualizadoDto = new ClienteDto
+            {
+                Id = clienteActualizado.Id,
+                Email = clienteActualizado.Email,
+                Nombre = clienteActualizado.Nombre,
+                FechaDeRegistro = clienteActualizado.FechaDeRegistro
+            };
+
+            return Result<ClienteDto>.Success(clienteActualizadoDto);
+        }
+
+        public async Task<Result> EliminarCliente(int clienteId)
+        {
+            var clienteExiste = await _clienteRepository.ObtenerCliente(clienteId);
+
+            if (clienteExiste == null)
+            {
+                return Result<ClienteDto>.Failure($"El cliente con id = {clienteId} no existe");
+            }
+
+            await _clienteRepository.EliminarCliente(clienteId);
+
+            return Result.Success();
         }
     }
 }

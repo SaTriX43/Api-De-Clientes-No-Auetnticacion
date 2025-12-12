@@ -49,11 +49,31 @@ namespace API_de_Clientes__sin_autenticación_.Controllers
         )
         {
             var clientesEncontrados = await _clienteService.ObtenerClientes(fechaInicio,fechaFinal,ordenarDeZ);
-            return Ok(clientesEncontrados.Value);
+            return Ok(new
+            {
+                success = true,
+                valor = clientesEncontrados.Value
+            });
+        }
+
+        [HttpGet("obtener-cliente-email/{email}")] 
+        public async Task<IActionResult> ObtenerClientePorEmail(string email)
+        {
+            var clientePorEmail = await _clienteService.ObtenerClientePorEmail(email);
+
+            if (clientePorEmail.IsFailure) {
+                return BadRequest(new
+                {
+                    success = false,
+                    error = clientePorEmail.Error
+                });
+            }
+
+            return Ok(clientePorEmail.Value);
         }
 
         [HttpPost("crear-cliente")]
-        public async Task<IActionResult> CrearCliente(ClienteCrearDto clienteCrearDto)
+        public async Task<IActionResult> CrearCliente([FromBody] ClienteCrearDto clienteCrearDto)
         {
             if(!ModelState.IsValid)
             {
@@ -80,6 +100,62 @@ namespace API_de_Clientes__sin_autenticación_.Controllers
                 new {id = clienteCreado.Value.Id},
                 clienteCreado.Value
                 );
+        }
+
+        [HttpPut("actualizar-cliente/{id}")]
+        public async Task<IActionResult> ActualizarCliente([FromBody] ClienteCrearDto clienteActualizar,int id)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    error = ModelState
+                });
+            }
+
+            var clienteActualizado = await _clienteService.ActualizarCliente(clienteActualizar, id);
+
+            if(clienteActualizado.IsFailure)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    error = clienteActualizado.Error
+                });
+            }
+
+            return Ok(new
+            {
+                success = true,
+                valor = clienteActualizado.Value
+            });
+        }
+
+        [HttpDelete("eliminar-cliente/{clienteId}")]
+        public async Task<IActionResult> EliminarCliente(int clienteId)
+        {
+            if(clienteId <= 0)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    error = "El id no debe de ser menor o igual a 0"
+                });
+            }
+
+            var clienteEliminado = await _clienteService.EliminarCliente(clienteId);
+
+            if(clienteEliminado.IsFailure)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    error = clienteEliminado.Error
+                });
+            }
+
+            return NoContent();
         }
     }
 }
